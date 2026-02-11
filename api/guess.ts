@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { ConditionalCheckFailedException } from "@aws-sdk/client-dynamodb";
-import { docClient, TABLE_NAME } from "../lib/dynamo";
-import { getBtcPrice } from "../lib/binance";
-import type { ActiveGuess, Player } from "../lib/types";
+import { docClient, TABLE_NAME } from "../server/dynamo";
+import { getBtcPrice } from "../shared/binance";
+import type { ActiveGuess, Player } from "../shared/types";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {

@@ -1,10 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
-import { docClient, TABLE_NAME } from "../lib/dynamo";
-import { getBtcPrice } from "../lib/binance";
-import type { Player } from "../lib/types";
-
-const GUESS_DURATION_MS = 60_000;
+import { docClient, TABLE_NAME } from "../server/dynamo";
+import { getBtcPrice } from "../shared/binance";
+import { GUESS_DURATION_MS } from "../shared/constants";
+import type { Player } from "../shared/types";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {

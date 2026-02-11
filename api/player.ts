@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { docClient, TABLE_NAME } from "../lib/dynamo";
-import type { Player } from "../lib/types";
+import { docClient, TABLE_NAME } from "../server/dynamo";
+import type { Player } from "../shared/types";
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") {
