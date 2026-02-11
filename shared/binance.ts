@@ -1,3 +1,6 @@
+/**
+ * Fetches the current BTC/USDT price from the Binance public API.
+ */
 export async function getBtcPrice(): Promise<number> {
   const res = await fetch(
     "https://api.binance.com/api/v3/ticker/price?symbol=BTCUSDT",

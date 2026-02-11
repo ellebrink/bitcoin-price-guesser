@@ -2,6 +2,9 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { submitGuess } from "../lib/api.ts";
 import { playerId } from "./usePlayer.ts";
 
+/**
+ * Submits an up/down guess and invalidates the player cache on success.
+ */
 export function useGuess() {
   const queryClient = useQueryClient();
 

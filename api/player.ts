@@ -3,6 +3,10 @@ import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
 import { docClient, TABLE_NAME } from "../server/dynamo";
 import type { Player } from "../shared/types";
 
+/**
+ * GET /api/player
+ * Returns the player record, creating one with score 0 if it doesn't exist.
+ */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "GET") {
     return res.status(405).json({ error: "Method not allowed" });

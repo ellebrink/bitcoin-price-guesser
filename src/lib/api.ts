@@ -1,10 +1,16 @@
 import type { Player, ActiveGuess } from "../../shared/types.ts";
 
+/**
+ * Response from POST /api/guess on success.
+ */
 export interface GuessResponse {
   success: boolean;
   activeGuess: ActiveGuess;
 }
 
+/**
+ * Response from POST /api/resolve — either not yet resolved or a final result.
+ */
 export type ResolveResponse =
   | { resolved: false; reason: string; remainingMs?: number }
   | {
@@ -16,8 +22,15 @@ export type ResolveResponse =
       priceAtGuess: number;
     };
 
+/**
+ * Narrowed type for a successfully resolved guess.
+ */
 export type ResolvedResult = Extract<ResolveResponse, { resolved: true }>;
 
+/**
+ * GET /api/player
+ * Fetches or creates a player record.
+ */
 export async function fetchPlayer(playerId: string): Promise<Player> {
   const res = await fetch(
     `/api/player?playerId=${encodeURIComponent(playerId)}`,
@@ -26,6 +39,10 @@ export async function fetchPlayer(playerId: string): Promise<Player> {
   return res.json() as Promise<Player>;
 }
 
+/**
+ * POST /api/guess
+ * Submits an up/down guess with the current BTC price.
+ */
 export async function submitGuess(
   playerId: string,
   direction: "up" | "down",
@@ -39,6 +56,10 @@ export async function submitGuess(
   return res.json() as Promise<GuessResponse>;
 }
 
+/**
+ * POST /api/resolve
+ * Resolves the active guess and returns the outcome.
+ */
 export async function resolveGuess(playerId: string): Promise<ResolveResponse> {
   const res = await fetch("/api/resolve", {
     method: "POST",

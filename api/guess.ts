@@ -5,6 +5,10 @@ import { docClient, TABLE_NAME } from "../server/dynamo";
 import { getBtcPrice } from "../shared/binance";
 import type { ActiveGuess, Player } from "../shared/types";
 
+/**
+ * POST /api/guess
+ * Records an up/down guess with the current BTC price. Rejects if a guess is already active.
+ */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
@@ -37,7 +41,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     guessedAt: Date.now(),
   };
 
-  // Atomic update: only succeeds if no active guess exists
+  // Only succeeds if no active guess exists
   try {
     await docClient.send(
       new UpdateCommand({

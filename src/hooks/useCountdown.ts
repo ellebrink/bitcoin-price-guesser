@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { getTimeRemaining, formatCountdown } from "../lib/utils.ts";
 
+/**
+ * Drives the 60s countdown UI. Returns `remainingMs`, `isExpired`, and a formatted `countdown` string.
+ */
 export function useCountdown(guessedAt: number) {
   const [remainingMs, setRemainingMs] = useState(() =>
     getTimeRemaining(guessedAt),

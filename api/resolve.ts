@@ -5,6 +5,10 @@ import { getBtcPrice } from "../shared/binance";
 import { GUESS_DURATION_MS } from "../shared/constants";
 import type { Player } from "../shared/types";
 
+/**
+ * POST /api/resolve
+ * Waits for GUESS_DURATION_MS, compares price, and updates the player's score.
+ */
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   if (req.method !== "POST") {
     return res.status(405).json({ error: "Method not allowed" });
