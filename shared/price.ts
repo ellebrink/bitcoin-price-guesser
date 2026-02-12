@@ -11,5 +11,11 @@ export async function getBtcPrice(): Promise<number> {
   }
 
   const data = (await res.json()) as { data: { amount: string } };
-  return parseFloat(data.data.amount);
+  const price = parseFloat(data.data.amount);
+
+  if (Number.isNaN(price)) {
+    throw new Error("Coinbase API returned an invalid price");
+  }
+
+  return price;
 }

@@ -1,5 +1,6 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
+import { ConditionalCheckFailedException } from "@aws-sdk/client-dynamodb";
 import { docClient, TABLE_NAME } from "../server/dynamo.js";
 import type { Player } from "../shared/types.js";
 
@@ -17,16 +18,35 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: "playerId query param required" });
   }
 
-  const { Item } = await docClient.send(
-    new GetCommand({ TableName: TABLE_NAME, Key: { playerId } }),
-  );
-  const player = Item as Player | undefined;
-  if (player) {
-    return res.json(player);
+  try {
+    const { Item } = await docClient.send(
+      new GetCommand({ TableName: TABLE_NAME, Key: { playerId } }),
+    );
+    const player = Item as Player | undefined;
+    if (player) {
+      return res.json(player);
+    }
+
+    const newPlayer: Player = { playerId, score: 0, activeGuess: null };
+    try {
+      await docClient.send(
+        new PutCommand({
+          TableName: TABLE_NAME,
+          Item: newPlayer,
+          ConditionExpression: "attribute_not_exists(playerId)",
+        }),
+      );
+      return res.json(newPlayer);
+    } catch (err) {
+      if (err instanceof ConditionalCheckFailedException) {
+        const { Item: existing } = await docClient.send(
+          new GetCommand({ TableName: TABLE_NAME, Key: { playerId } }),
+        );
+        return res.json(existing as Player);
+      }
+      throw err;
+    }
+  } catch {
+    return res.status(500).json({ error: "Internal server error" });
   }
-  const newPlayer: Player = { playerId, score: 0, activeGuess: null };
-  await docClient.send(
-    new PutCommand({ TableName: TABLE_NAME, Item: newPlayer }),
-  );
-  return res.json(newPlayer);
 }

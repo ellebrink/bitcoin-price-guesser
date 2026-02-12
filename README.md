@@ -9,7 +9,7 @@ A real-time Bitcoin price guessing game. Predict whether the price will go up or
 ## How It Works
 
 1. A player is automatically created for you (persisted in your browser)
-2. See the current Bitcoin price in real time via the Binance API
+2. See the current Bitcoin price in real time via the Coinbase API
 3. Guess **Up** or **Down**
 4. Wait 60 seconds for the result
 5. If the price moved in the direction you guessed, you score **+1**; otherwise **-1**
@@ -21,7 +21,7 @@ Your score persists across sessions.
 - **Frontend** — React, Vite, Tailwind CSS, TanStack Query
 - **Backend** — Vercel Serverless Functions (Node.js)
 - **Database** — DynamoDB
-- **Price Data** — Binance public API (`GET /api/v3/ticker/price`)
+- **Price Data** — Coinbase public API (`GET /v2/prices/BTC-USD/spot`)
 
 ## Prerequisites
 
@@ -139,7 +139,7 @@ api/               Vercel serverless functions
 server/            Backend-only utilities
   dynamo.ts          DynamoDB client
 shared/            Code shared by frontend and backend
-  binance.ts         Binance price fetcher
+  price.ts           Coinbase price fetcher
   constants.ts       Shared constants
   types.ts           TypeScript types
 src/               React frontend

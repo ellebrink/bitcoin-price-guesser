@@ -7,7 +7,7 @@ import { useResolve } from "../../hooks/useResolve.ts";
 import { formatPrice } from "../../lib/utils.ts";
 
 const RING_CIRCUMFERENCE = 280;
-const POLL_INTERVAL_MS = 5000;
+const POLL_INTERVAL_MS = 1000;
 
 export function GuessWaiting({
   activeGuess,
@@ -19,14 +19,14 @@ export function GuessWaiting({
   const { remainingMs, isExpired, countdown } = useCountdown(
     activeGuess.guessedAt,
   );
-  const resolve = useResolve();
+  const { mutate, isError } = useResolve();
 
   // Poll resolve endpoint once the countdown expires
   useEffect(() => {
     if (!isExpired) return;
 
     const poll = () => {
-      resolve.mutate(undefined, {
+      mutate(undefined, {
         onSuccess: (data) => {
           if (data.resolved) onResolved(data);
         },
@@ -36,7 +36,7 @@ export function GuessWaiting({
     poll();
     const interval = setInterval(poll, POLL_INTERVAL_MS);
     return () => clearInterval(interval);
-  }, [isExpired, onResolved]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [isExpired, onResolved, mutate]);
 
   const ringOffset = useMemo(() => {
     if (remainingMs <= 0) return RING_CIRCUMFERENCE;
@@ -98,6 +98,11 @@ export function GuessWaiting({
           at {formatPrice(activeGuess.priceAtGuess)}
         </div>
       </div>
+      {isError && (
+        <div className="font-mono text-xs text-bear">
+          Connection error — retrying...
+        </div>
+      )}
     </div>
   );
 }

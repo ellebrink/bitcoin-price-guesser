@@ -26,44 +26,48 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'direction must be "up" or "down"' });
   }
 
-  const { Item } = await docClient.send(
-    new GetCommand({ TableName: TABLE_NAME, Key: { playerId } }),
-  );
-  const player = Item as Player | undefined;
-  if (!player) {
-    return res.status(404).json({ error: "Player not found" });
-  }
-
-  const priceAtGuess = await getBtcPrice();
-  const activeGuess: ActiveGuess = {
-    direction,
-    priceAtGuess,
-    guessedAt: Date.now(),
-  };
-
-  // Only succeeds if no active guess exists
   try {
-    await docClient.send(
-      new UpdateCommand({
-        TableName: TABLE_NAME,
-        Key: { playerId },
-        UpdateExpression: "SET activeGuess = :guess",
-        ConditionExpression:
-          "attribute_exists(playerId) AND (activeGuess = :null OR attribute_not_exists(activeGuess))",
-        ExpressionAttributeValues: {
-          ":guess": activeGuess,
-          ":null": null,
-        },
-      }),
+    const { Item } = await docClient.send(
+      new GetCommand({ TableName: TABLE_NAME, Key: { playerId } }),
     );
-  } catch (err) {
-    if (err instanceof ConditionalCheckFailedException) {
-      return res
-        .status(409)
-        .json({ error: "Active guess already exists. Resolve it first." });
+    const player = Item as Player | undefined;
+    if (!player) {
+      return res.status(404).json({ error: "Player not found" });
     }
-    throw err;
-  }
 
-  return res.json({ success: true, activeGuess });
+    const priceAtGuess = await getBtcPrice();
+    const activeGuess: ActiveGuess = {
+      direction,
+      priceAtGuess,
+      guessedAt: Date.now(),
+    };
+
+    // Only succeeds if no active guess exists
+    try {
+      await docClient.send(
+        new UpdateCommand({
+          TableName: TABLE_NAME,
+          Key: { playerId },
+          UpdateExpression: "SET activeGuess = :guess",
+          ConditionExpression:
+            "attribute_exists(playerId) AND (activeGuess = :null OR attribute_not_exists(activeGuess))",
+          ExpressionAttributeValues: {
+            ":guess": activeGuess,
+            ":null": null,
+          },
+        }),
+      );
+    } catch (err) {
+      if (err instanceof ConditionalCheckFailedException) {
+        return res
+          .status(409)
+          .json({ error: "Active guess already exists. Resolve it first." });
+      }
+      throw err;
+    }
+
+    return res.json({ success: true, activeGuess });
+  } catch {
+    return res.status(500).json({ error: "Internal server error" });
+  }
 }
