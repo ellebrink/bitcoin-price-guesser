@@ -2,6 +2,10 @@
 
 A real-time Bitcoin price guessing game. Predict whether the price will go up or down, wait 60 seconds, and see if you were right.
 
+<p align="center">
+  <img src="docs/screenshot.png" alt="Bitcoin Price Guesser screenshot" width="600" />
+</p>
+
 ## Deploy
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fellebrink%2Fbitcoin-price-guesser&env=AWS_ACCESS_KEY_ID,AWS_SECRET_ACCESS_KEY,AWS_REGION&envDefaults=%7B%22AWS_REGION%22%3A%22eu-north-1%22%7D&envDescription=AWS%20credentials%20for%20DynamoDB%20access.%20See%20the%20AWS%20Setup%20section%20in%20the%20README.)
