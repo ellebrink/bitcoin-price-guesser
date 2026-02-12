@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
-import { docClient, TABLE_NAME } from "../server/dynamo";
-import { getBtcPrice } from "../shared/binance";
-import { GUESS_DURATION_MS } from "../shared/constants";
-import type { Player } from "../shared/types";
+import { docClient, TABLE_NAME } from "../server/dynamo.js";
+import { getBtcPrice } from "../shared/price.js";
+import { GUESS_DURATION_MS } from "../shared/constants.js";
+import type { Player } from "../shared/types.js";
 
 /**
  * POST /api/resolve

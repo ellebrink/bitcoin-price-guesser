@@ -1,7 +1,7 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GetCommand, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { docClient, TABLE_NAME } from "../server/dynamo";
-import type { Player } from "../shared/types";
+import { docClient, TABLE_NAME } from "../server/dynamo.js";
+import type { Player } from "../shared/types.js";
 
 /**
  * GET /api/player

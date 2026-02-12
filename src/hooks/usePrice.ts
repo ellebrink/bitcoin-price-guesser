@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBtcPrice } from "../../shared/binance.ts";
+import { getBtcPrice } from "../../shared/price.ts";
 
 const POLL_INTERVAL_MS = 3000;
 
 /**
- * Polls Binance every POLL_INTERVAL_MS for the live BTC/USDT price.
+ * Polls price query every POLL_INTERVAL_MS for the live BTC/USD price.
  */
 export function usePrice() {
   return useQuery({

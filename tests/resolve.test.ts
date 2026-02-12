@@ -12,12 +12,12 @@ vi.mock("../server/dynamo", () => ({
   TABLE_NAME: "test-table",
 }));
 
-vi.mock("../shared/binance", () => ({
+vi.mock("../shared/price", () => ({
   getBtcPrice: vi.fn(),
 }));
 
 import resolve from "../api/resolve.ts";
-import { getBtcPrice } from "../shared/binance.ts";
+import { getBtcPrice } from "../shared/price.ts";
 
 /**
  * Mock Vercel response. Each method returns `res` to support chaining (e.g., `res.status(400).json(...)`).

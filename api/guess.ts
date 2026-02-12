@@ -1,9 +1,9 @@
 import type { VercelRequest, VercelResponse } from "@vercel/node";
 import { GetCommand, UpdateCommand } from "@aws-sdk/lib-dynamodb";
 import { ConditionalCheckFailedException } from "@aws-sdk/client-dynamodb";
-import { docClient, TABLE_NAME } from "../server/dynamo";
-import { getBtcPrice } from "../shared/binance";
-import type { ActiveGuess, Player } from "../shared/types";
+import { docClient, TABLE_NAME } from "../server/dynamo.js";
+import { getBtcPrice } from "../shared/price.js";
+import type { ActiveGuess, Player } from "../shared/types.js";
 
 /**
  * POST /api/guess

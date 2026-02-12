@@ -120,7 +120,7 @@ vercel env pull
 Start the dev server (serves both frontend and API routes):
 
 ```bash
-pnpm dev
+vercel dev
 ```
 
 ## Running Tests
